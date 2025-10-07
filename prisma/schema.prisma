@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id             Int          @id @default(autoincrement())
+  departamentoId Int
+  nombre         String
+  apellidoPat    String?
+  apellidoMat    String?
+  username       String       @unique
+  password       String
+  role           String
+
+  Departamento   Departamento @relation(fields: [departamentoId], references: [id], onDelete: Cascade)
+  Reservas       Reserva[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Departamento {
+  id          Int          @id @default(autoincrement())
+  nombre      String       @unique
+  Usuarios    Usuario[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Reserva {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  fechaReserva DateTime       @db.Date
+
+  Usuario       Usuario        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ReservaPlatos ReservaPlato[]
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model ReservaPlato {
+  id          Int         @id @default(autoincrement())
+  reservaId   Int
+  menuPlatoId Int
+  cantidad    Int
+
+  Reserva      Reserva      @relation(fields: [reservaId], references: [id], onDelete: Cascade)
+  MenuPlato    MenuPlato    @relation(fields: [menuPlatoId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Menu {
+  id          Int           @id @default(autoincrement())
+  fecha       DateTime      @db.Date @unique
+  publicado   Boolean       @default(false)
+
+  menuPlatos  MenuPlato[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model MenuPlato {
+  id            Int           @id @default(autoincrement())
+  menuId        Int
+  platoId       Int
+  elegible      Boolean
+
+  Menu          Menu          @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  Plato         Plato         @relation(fields: [platoId], references: [id], onDelete: Cascade)
+  ReservaPlatos ReservaPlato[]
+
+  @@unique([menuId, platoId])
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Plato {
+  id          Int           @id @default(autoincrement())
+  nombre      String        @unique
+  descripcion String
+  precio      Float
+
+  MenuPlatos  MenuPlato[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
