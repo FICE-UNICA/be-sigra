@@ -67,6 +67,14 @@ export class DepartamentoService {
   async remove(id: number): Promise<{message:string}> {
     await this.findOne(id);
 
+    const usersExist= await this.prisma.usuario.findFirst({
+      where:{departamentoId: id}
+    })
+
+    if(usersExist){
+       throw new ConflictException('No se puede eliminar este departamento porque posee usuarios')
+    }
+
     await this.prisma.departamento.delete({ 
       where: { id } 
     });

@@ -1,10 +1,13 @@
-import { IsIn, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsIn, IsInt, IsNotEmpty, Min } from "class-validator";
 
 
 export class ReservaPlatoDto {
-    @IsNotEmpty({ message: 'El nombre del plato es obligatorio.' })
-    @IsString({ message: 'El nombre debe ser un texto.' })
-    nombre: string;  
+    @IsNotEmpty({ message: 'El id de la opción es obligatorio.' })
+    @IsInt({ message: 'Debe ser un id válido' })
+    @Min(1, { message: 'El id de la opción debe ser válido' })
+    @Type(() => Number)
+    opcionId: number;
 
     @IsNotEmpty({ message: 'La cantidad de cada plato es obligatoria.' })
     @IsInt({ message: 'La cantidad debe ser un número entero.' })

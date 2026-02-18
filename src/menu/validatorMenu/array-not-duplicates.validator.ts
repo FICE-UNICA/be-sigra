@@ -5,20 +5,18 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'UniquePlatoNombre', async: false })
+@ValidatorConstraint({ name: 'UniquePlatoId', async: false })
 export class UniquePlatoNombreConstraint implements ValidatorConstraintInterface {
   validate(menuPlatos: any[], args: ValidationArguments): boolean {
     if (!Array.isArray(menuPlatos)) return false;
 
-    // Extraemos todos los nombres
-    const nombres = menuPlatos.map(plato => plato.nombre);
-    // Comprobamos si hay duplicados
-    const uniqueNombres = new Set(nombres);
+    const ids = menuPlatos.map(plato => plato.platoId);
+    const uniqueIds = new Set(ids);
 
-    return uniqueNombres.size === nombres.length;
+    return uniqueIds.size === ids.length;
   }
 
   defaultMessage(args: ValidationArguments): string {
-    return 'Hay platos con nombres repetidos en el menú';
+    return 'Hay platos duplicados en el menú';
   }
 }

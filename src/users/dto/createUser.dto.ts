@@ -1,4 +1,5 @@
-import { IsString, Length, MinLength, IsEnum, IsNotEmpty, Validate } from 'class-validator';
+import { IsString, Length, MinLength, IsEnum, IsNotEmpty, Validate, IsInt, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 import { UniqueUsernameConstraint } from '../validatorUser/uniqueUsername.validator';
 import { PasswordStrengthConstraint } from '../validatorUser/passwordValidate.validator';
 
@@ -8,10 +9,11 @@ export enum UserRole {
 }
 
 export class CreateUserDto {
-  @IsString()
-  @Length(1, 50, { message: 'El nombre tiene que estar entre los 1 y 50 caracteres' })
-  @IsNotEmpty({ message: 'El nombre de departamento es obligatorio' })
-  departamento: string;
+  @IsInt({ message: 'El id del departamento debe ser un número entero' })
+  @Min(1, { message: 'El id del departamento debe ser válido' })
+  @IsNotEmpty({ message: 'El departamento es obligatorio' })
+  @Type(() => Number)
+  departamentoId: number;
 
   @IsString()
   @Length(1, 50, { message: 'El nombre tiene que estar entre los 1 y 50 caracteres' })

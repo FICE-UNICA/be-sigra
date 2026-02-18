@@ -10,6 +10,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true, 
   }));
-  await app.listen(process.env.PORT ?? 3000);
+
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:3000', 'http://192.168.213.53:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH','OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  });
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

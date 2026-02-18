@@ -9,9 +9,9 @@ export class AuthService {
   constructor(private readonly prisma:PrismaService, private jwtService:JwtService){}
 
     async login(userLogin: LoginUserDto){
-      const {user, password}=userLogin
+      const {username, password}=userLogin
       
-      const usuarioExist = await this.prisma.usuario.findUnique({ where: { username: user } });
+      const usuarioExist = await this.prisma.usuario.findUnique({ where: { username: username } });
 
       if (!usuarioExist) {
         throw new UnauthorizedException('Usuario no existente');

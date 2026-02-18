@@ -19,6 +19,8 @@ async function main() {
     data: {
       departamentoId: dept.id,
       nombre: 'Admin',
+      apellidoPat: '-',
+      apellidoMat: '-',
       username: 'admin',
       password: passwordHash,    
       role: 'ADMIN'

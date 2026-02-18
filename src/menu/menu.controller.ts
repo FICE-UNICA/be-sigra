@@ -25,8 +25,7 @@ export class MenuController {
 
     @Get('forFecha/:fecha')
     findByFecha(@Param('fecha') fecha: string) {
-      const fechaParse = new Date(fecha)
-      return this.menuService.findByFecha(fechaParse);
+      return this.menuService.findByFecha(fecha);
     }
         
     @Post('create')

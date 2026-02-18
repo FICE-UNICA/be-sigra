@@ -12,13 +12,6 @@ import { AdminGuard } from 'src/auth/guards/admin.guard';
 @UseGuards(AuthGuard)
 export class ReservaController {
     constructor(private readonly reservaService: ReservaService){}
-          
-    @Get(':id')
-    @UseGuards(AdminGuard)
-    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
-      const user_token=req.user
-      return this.reservaService.getOneReservation(user_token,id);
-    }
 
     @Get('getAllReservationsUser')
     getAllReservationsUser(@Req() req: Request) {
@@ -26,6 +19,23 @@ export class ReservaController {
       return this.reservaService.getAllReservationsUser(user_token);
     }
 
+    @Get('getAllMenusWithReservations')
+    @UseGuards(AdminGuard)
+    getAllMenusWithReservations() {
+      return this.reservaService.getAllMenusWithReservations();
+    }
+
+    @Get('getReservationsByMenu/:menuId')
+    @UseGuards(AdminGuard)
+    getReservationsByMenu(@Param('menuId', ParseIntPipe) menuId: number) {
+      return this.reservaService.getReservationsByMenu(menuId);
+    }
+       
+    @Get(':id')
+    findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
+      const user_token=req.user
+      return this.reservaService.getOneReservation(user_token,id);
+    }
 
     @Post('create')
     @UseGuards(UserGuard)

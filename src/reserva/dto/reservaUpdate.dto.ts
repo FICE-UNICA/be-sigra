@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { ArrayNotEmpty, IsArray, IsDate, IsNotEmpty, Validate, ValidateNested } from "class-validator";
 import { ReservaPlatoDto } from "./reservaPlato.dto";
-import { NoDuplicateNamesConstraint } from "../validatorReserva/no-duplicated-names.validator";
+import { NoDuplicateOptionIdConstraint } from "../validatorReserva/no-duplicated-names.validator";
 
 
 export class UpdateReservaDto {
@@ -12,7 +12,7 @@ export class UpdateReservaDto {
     
     @IsArray()
     @ArrayNotEmpty({message:"No puedes pasar una reserva vacia"})
-    @Validate(NoDuplicateNamesConstraint)
+    @Validate(NoDuplicateOptionIdConstraint)
     @ValidateNested({ each: true })
     @Type(() => ReservaPlatoDto)
     reservaPlatos: ReservaPlatoDto[];     
